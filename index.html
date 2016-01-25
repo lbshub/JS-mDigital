@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<title>背景滚动式抽奖(数字/文字/图案)</title>
+
+	<style type="text/css">
+	*{ margin:0; padding:0;}
+	<style type="text/css">
+	*{margin:0;padding:0;}
+	ul,li{list-style: none;} 
+	.page{width: 100% ;overflow: hidden;}
+	#digitalBox{ width: 640px; height: 265px; margin: 0 auto; overflow: hidden;}
+	#digitalBox li{float: left; width: 160px; height: 265px; overflow: hidden; background: url(num.png) repeat-y; }
+	.btn{width: 100%; text-align: center;}
+	#startBtn{display: inline-block; width: 50%; height: 50px; line-height: 50px; text-align: center; background: #f00; color: #fff; font-size: 20px; border-radius: 5px;}
+	</style>
+
+</head>
+<body>
+
+<div class="page">
+	<div id="wrapBox">
+		<ul id="digitalBox">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+</div>
+<div class="btn"><span id="startBtn">点击开始</span></div>
+
+<!-- 加载 mTips start -->
+<link rel="stylesheet" type="text/css" href="js/Tips/mTips.css" />
+<script type="text/javascript" src="js/Tips/mTips.min.js"></script>
+<!-- 加载 mTips end -->
+<!-- <script type="text/javascript" src="js/zepto.min.js"></script> -->
+ <script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" src="mDigital.js"></script>
+
+<script type="text/javascript">
+// 缩放
+scalePage('#wrapBox');
+
+//滚动抽奖
+var btn = document.getElementById('startBtn'),
+	scrollDigital = new Digital({
+		el: '#digitalBox',
+		// target: 1314,
+		distance: 265,
+		duration: 3000,
+		interval: 300
+			// complete: function(){
+			// 	alert(1)
+			// }
+	});
+
+var random = function(n) {
+	var s = '',
+		i = 0,
+		n = parseInt(n) || 6;
+	for (; i < n; i++) s += Math.floor(Math.random() * 10);
+	return s;
+};
+
+btn.onclick = function() {
+	var num = random(4); //模拟数据
+	// console.log(num)
+	// console.time('计时');
+	btn.innerHTML = '正在抽奖中..';
+	scrollDigital.start(num, function() {
+		// console.timeEnd('计时');
+		btn.innerHTML = '继续抽奖';
+		Tips.confirm({
+			content: '<strong>'+ num +'</strong> 恭喜您中奖了！',
+			define: '去领奖',
+			cancel: '再抽一次',
+			after: function(b){
+				if(b){
+					location.href = 'http://xw.qq.com/';
+				}
+			}
+		});
+	});
+};
+
+</script>
+
+</body>
+</html>
